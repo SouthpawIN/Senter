@@ -1,0 +1,198 @@
+{
+  "manifest_version": "1.0",
+  "profiles": ["core", "exec", "graph"],
+  "agent": {
+    "id": "ajson://ai-toolbox/agents/router",
+    "name": "Qwen Omni Router",
+    "version": "1.0.0",
+    "description": "Intelligent routing agent that analyzes requests and directs them to appropriate specialized agents",
+    "author": "AI Toolbox",
+    "tags": ["routing", "orchestration", "classification", "qwen-omni"]
+  },
+  "capabilities": [
+    {
+      "id": "routing",
+      "description": "Analyze and route requests to appropriate agents based on content and intent",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "User query or request to analyze"
+          },
+          "context": {
+            "type": "object",
+            "description": "Additional context information",
+            "properties": {
+              "user_history": {"type": "array", "items": {"type": "string"}},
+              "available_agents": {"type": "array", "items": {"type": "string"}},
+              "urgency": {"type": "string", "enum": ["low", "medium", "high"]}
+            }
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "id": "intent-classification",
+      "description": "Classify user intent and extract key information",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to analyze for intent"
+          },
+          "categories": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Possible intent categories"
+          }
+        },
+        "required": ["text"]
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "route_request",
+      "type": "function",
+      "description": "Analyze a request and determine the best agent to handle it",
+      "function": {
+        "name": "route_request",
+        "description": "Route user requests to appropriate specialized agents",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The user's query or request"
+            },
+            "available_agents": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "List of available agent IDs"
+            },
+            "context": {
+              "type": "object",
+              "description": "Additional routing context"
+            }
+          },
+          "required": ["query", "available_agents"]
+        }
+      }
+    },
+    {
+      "id": "classify_intent",
+      "type": "function",
+      "description": "Classify the intent behind a user message",
+      "function": {
+        "name": "classify_intent",
+        "description": "Analyze text to determine user intent and extract key information",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to analyze"
+            },
+            "possible_intents": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "List of possible intent categories"
+            }
+          },
+          "required": ["text"]
+        }
+      }
+    }
+  ],
+  "modalities": {
+    "input": ["text", "image", "audio"],
+    "output": ["text"]
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8",
+    "entrypoint": "qwen25_omni_agent.py",
+    "dependencies": [
+      "torch>=2.0.0",
+      "transformers>=4.40.0",
+      "accelerate",
+      "numpy",
+      "soundfile",
+      "scipy"
+    ],
+    "environment": {
+      "MODEL_PATH": "/home/sovthpaw/Models/Qwen2.5-Omni-3B"
+    },
+    "resources": {
+      "gpu_memory_mb_min": 8192,
+      "cpu_cores_min": 2,
+      "memory_mb_min": 4096
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "router",
+        "ref": "ajson://ai-toolbox/agents/router",
+        "role": "router"
+      },
+      {
+        "id": "image-generator",
+        "ref": "ajson://ai-toolbox/agents/image-generator",
+        "role": "image-generation"
+      },
+      {
+        "id": "music-composer",
+        "ref": "ajson://ai-toolbox/agents/music-composer",
+        "role": "music-generation"
+      },
+      {
+        "id": "summarizer",
+        "ref": "ajson://ai-toolbox/agents/summarizer",
+        "role": "text-processing"
+      },
+      {
+        "id": "analyzer",
+        "ref": "ajson://ai-toolbox/agents/analyzer",
+        "role": "analysis"
+      }
+    ],
+    "edges": [
+      {
+        "from": "router",
+        "to": "image-generator",
+        "condition": "intent == 'image_generation' or query.contains(['draw', 'create image', 'generate picture'])"
+      },
+      {
+        "from": "router",
+        "to": "music-composer",
+        "condition": "intent == 'music_generation' or query.contains(['music', 'song', 'compose', 'melody'])"
+      },
+      {
+        "from": "router",
+        "to": "summarizer",
+        "condition": "intent == 'summarization' or query.contains(['summarize', 'summary', 'condense'])"
+      },
+      {
+        "from": "router",
+        "to": "analyzer",
+        "condition": "intent == 'analysis' or query.contains(['analyze', 'examine', 'review'])"
+      }
+    ],
+    "message_envelope": {
+      "schema": "https://jsonagents.org/json/schema/message-envelope.json"
+    }
+  },
+  "extensions": {
+    "x-routing": {
+      "model": "Qwen2.5-Omni-3B",
+      "routing_strategies": ["intent-based", "content-based", "context-aware"],
+      "supported_agents": ["image-generator", "music-composer", "summarizer", "analyzer"],
+      "confidence_threshold": 0.8,
+      "fallback_agent": "summarizer"
+    }
+  }
+}

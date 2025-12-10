@@ -1,0 +1,200 @@
+{
+  "manifest_version": "1.0",
+  "profiles": ["core", "exec"],
+  "agent": {
+    "id": "ajson://ai-toolbox/agents/analyzer",
+    "name": "Qwen Omni Analyzer",
+    "version": "1.0.0",
+    "description": "Comprehensive analysis agent using Qwen2.5-Omni for multimodal content analysis",
+    "author": "AI Toolbox",
+    "tags": ["analysis", "multimodal", "classification", "qwen-omni"]
+  },
+  "capabilities": [
+    {
+      "id": "content-analysis",
+      "description": "Analyze various types of content using multimodal capabilities",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Primary content to analyze"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": ["text", "image", "audio", "video", "mixed"],
+            "description": "Type of content being analyzed"
+          },
+          "analysis_type": {
+            "type": "string",
+            "enum": ["sentiment", "topic", "quality", "structure", "comprehensive"],
+            "default": "comprehensive",
+            "description": "Type of analysis to perform"
+          },
+          "media_path": {
+            "type": "string",
+            "description": "Path to media file (image/audio/video)"
+          }
+        },
+        "required": ["content"]
+      }
+    },
+    {
+      "id": "sentiment-analysis",
+      "description": "Analyze sentiment and emotional content",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to analyze for sentiment"
+          },
+          "context": {
+            "type": "string",
+            "description": "Additional context for analysis"
+          }
+        },
+        "required": ["text"]
+      }
+    },
+    {
+      "id": "quality-assessment",
+      "description": "Assess quality and characteristics of content",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Content to assess"
+          },
+          "criteria": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Quality criteria to evaluate"
+          }
+        },
+        "required": ["content"]
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "analyze_content",
+      "type": "function",
+      "description": "Perform comprehensive content analysis",
+      "function": {
+        "name": "analyze_content",
+        "description": "Analyze content using multimodal capabilities",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Primary content to analyze"
+            },
+            "analysis_focus": {
+              "type": "string",
+              "enum": ["sentiment", "topics", "quality", "structure", "all"],
+              "default": "all",
+              "description": "Specific aspect to focus analysis on"
+            },
+            "include_examples": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include examples in analysis"
+            }
+          },
+          "required": ["content"]
+        }
+      }
+    },
+    {
+      "id": "analyze_sentiment",
+      "type": "function",
+      "description": "Analyze sentiment and emotional tone",
+      "function": {
+        "name": "analyze_sentiment",
+        "description": "Determine sentiment and emotional content",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text to analyze for sentiment"
+            },
+            "detailed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Provide detailed sentiment breakdown"
+            }
+          },
+          "required": ["text"]
+        }
+      }
+    },
+    {
+      "id": "classify_content",
+      "type": "function",
+      "description": "Classify content into categories",
+      "function": {
+        "name": "classify_content",
+        "description": "Categorize content based on characteristics",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Content to classify"
+            },
+            "categories": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Possible categories for classification"
+            },
+            "multi_label": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow multiple category assignments"
+            }
+          },
+          "required": ["content"]
+        }
+      }
+    }
+  ],
+  "modalities": {
+    "input": ["text", "image", "audio", "video"],
+    "output": ["text"]
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8",
+    "entrypoint": "qwen25_omni_agent.py",
+    "dependencies": [
+      "torch>=2.0.0",
+      "transformers>=4.40.0",
+      "accelerate",
+      "numpy",
+      "soundfile",
+      "scipy",
+      "PIL"
+    ],
+    "environment": {
+      "MODEL_PATH": "/home/sovthpaw/Models/Qwen2.5-Omni-3B"
+    },
+    "resources": {
+      "gpu_memory_mb_min": 8192,
+      "cpu_cores_min": 2,
+      "memory_mb_min": 4096
+    }
+  },
+  "extensions": {
+    "x-analysis": {
+      "model": "Qwen2.5-Omni-3B",
+      "analysis_types": ["sentiment", "topic", "quality", "structure", "multimodal"],
+      "supported_languages": ["en", "zh", "multilingual"],
+      "confidence_scoring": true,
+      "explanation_support": true
+    }
+  }
+}

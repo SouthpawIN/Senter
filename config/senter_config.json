@@ -1,0 +1,33 @@
+{
+  "name": "Senter",
+  "version": "1.0.0",
+  "description": "Universal AI Personal Assistant with expandable agent system",
+  "topics_dir": "Topics",
+  "agents_dir": "Agents",
+  "outputs_dir": "outputs",
+  "max_parallel_processes": 2,
+  "default_model": "Qwen2.5-Omni-3B",
+  "web_search_enabled": true,
+  "context_window": 32768,
+  "parallel_processing": {
+    "researcher_enabled": true,
+    "router_enabled": true,
+    "max_wait_time": 30
+  },
+  "context_integration": {
+    "web_results_weight": 0.4,
+    "topic_context_weight": 0.4,
+    "chat_history_weight": 0.2,
+    "max_context_length": 8000
+  },
+  "agent_selection": {
+    "embed_filter_threshold": 4,
+    "llm_selection_enabled": true,
+    "allow_new_topics": true
+  },
+  "learning": {
+    "senter_md_enabled": true,
+    "auto_summarize": true,
+    "context_retention_days": 90
+  }
+}

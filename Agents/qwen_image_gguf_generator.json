@@ -1,0 +1,97 @@
+{
+  "manifest_version": "1.0",
+  "profiles": ["core", "exec"],
+  "agent": {
+    "id": "ajson://ai-toolbox/functions/qwen_image_gguf_generator",
+    "name": "Qwen Image GGUF Generator",
+    "version": "1.0.0",
+    "description": "Generate images using Qwen Image model with GGUF quantization for efficient inference",
+    "author": "AI Toolbox",
+    "tags": ["image", "generation", "qwen", "gguf", "diffusion"]
+  },
+  "capabilities": [
+    {
+      "id": "generate-image",
+      "description": "Generate images from text prompts using Qwen Image model"
+    }
+  ],
+  "tools": [
+    {
+      "id": "generate_image_from_prompt",
+      "type": "function",
+      "description": "Generate an image from a text prompt using Qwen Image GGUF model",
+      "function": {
+        "name": "generate_image_from_prompt",
+        "description": "Create images from textual descriptions using advanced diffusion models",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "description": "Text description of the image to generate"
+            },
+            "negative_prompt": {
+              "type": "string",
+              "description": "What to avoid in the generated image",
+              "default": ""
+            },
+            "width": {
+              "type": "integer",
+              "description": "Image width in pixels",
+              "default": 1024
+            },
+            "height": {
+              "type": "integer",
+              "description": "Image height in pixels",
+              "default": 1024
+            },
+            "num_inference_steps": {
+              "type": "integer",
+              "description": "Number of denoising steps",
+              "default": 50
+            },
+            "guidance_scale": {
+              "type": "number",
+              "description": "How closely to follow the prompt",
+              "default": 7.5
+            }
+          },
+          "required": ["prompt"]
+        }
+      }
+    }
+  ],
+  "modalities": {
+    "input": ["text"],
+    "output": ["text", "image"]
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8",
+    "entrypoint": "qwen_image_gguf_generator.py",
+    "dependencies": [
+      "torch",
+      "diffusers",
+      "transformers",
+      "PIL",
+      "pathlib"
+    ],
+    "environment": {
+      "MODEL_PATH": "/home/sovthpaw/Models/Qwen_Image-Q6_K.gguf",
+      "OUTPUT_DIR": "/home/sovthpaw/outputs"
+    },
+    "resources": {
+      "gpu_memory_mb_min": 8192,
+      "cpu_cores_min": 4,
+      "memory_mb_min": 16384
+    }
+  },
+  "extensions": {
+    "x-function": {
+      "auto_generated": true,
+      "model": "Qwen/Qwen-Image",
+      "quantization": "GGUF-Q6_K",
+      "capabilities": ["text-to-image", "image-generation"]
+    }
+  }
+}

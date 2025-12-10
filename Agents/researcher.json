@@ -1,0 +1,155 @@
+{
+  "manifest_version": "1.0",
+  "profiles": ["core", "exec"],
+  "agent": {
+    "id": "ajson://ai-toolbox/agents/researcher",
+    "name": "Web Research Agent",
+    "version": "1.0.0",
+    "description": "Generates optimized web search queries and synthesizes research context for informed responses",
+    "author": "AI Toolbox",
+    "tags": ["research", "web-search", "query-optimization", "information-gathering"]
+  },
+  "capabilities": [
+    {
+      "id": "query-generation",
+      "description": "Create effective search queries from user questions",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "User's question or information need"
+          },
+          "context": {
+            "type": "object",
+            "description": "Additional context for query optimization",
+            "properties": {
+              "topic": {"type": "string"},
+              "domain": {"type": "string"},
+              "time_sensitivity": {"type": "boolean"}
+            }
+          }
+        },
+        "required": ["question"]
+      }
+    },
+    {
+      "id": "context-synthesis",
+      "description": "Synthesize and prioritize web search results",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "search_results": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Raw web search results"
+          },
+          "query": {
+            "type": "string",
+            "description": "Original search query"
+          },
+          "max_context_length": {
+            "type": "integer",
+            "default": 2000,
+            "description": "Maximum context length to return"
+          }
+        },
+        "required": ["search_results"]
+      }
+    }
+  ],
+  "tools": [
+    {
+      "id": "generate_search_query",
+      "type": "function",
+      "description": "Create optimized search query for web research",
+      "function": {
+        "name": "generate_search_query",
+        "description": "Transform user question into effective web search query",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "User's question"
+            },
+            "search_engine": {
+              "type": "string",
+              "default": "google",
+              "enum": ["google", "bing", "duckduckgo"],
+              "description": "Target search engine"
+            },
+            "include_date_filter": {
+              "type": "boolean",
+              "default": false,
+              "description": "Include recency filters"
+            }
+          },
+          "required": ["question"]
+        }
+      }
+    },
+    {
+      "id": "synthesize_research_context",
+      "type": "function",
+      "description": "Process and prioritize web search results",
+      "function": {
+        "name": "synthesize_research_context",
+        "description": "Extract and organize relevant information from search results",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "search_results": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Web search results"
+            },
+            "original_query": {
+              "type": "string",
+              "description": "The original search query"
+            },
+            "focus_areas": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Specific areas to focus on"
+            }
+          },
+          "required": ["search_results", "original_query"]
+        }
+      }
+    }
+  ],
+  "modalities": {
+    "input": ["text"],
+    "output": ["text"]
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8",
+    "entrypoint": "qwen25_omni_agent.py",
+    "dependencies": [
+      "torch>=2.0.0",
+      "transformers>=4.40.0",
+      "accelerate",
+      "numpy"
+    ],
+    "environment": {
+      "MODEL_PATH": "/home/sovthpaw/Models/Qwen2.5-Omni-3B"
+    },
+    "resources": {
+      "gpu_memory_mb_min": 4096,
+      "cpu_cores_min": 2,
+      "memory_mb_min": 2048
+    }
+  },
+  "extensions": {
+    "x-research": {
+      "model": "Qwen2.5-Omni-3B",
+      "specialization": "research_query_optimization",
+      "search_engines": ["google", "bing", "duckduckgo"],
+      "context_window": 32768,
+      "query_optimization": true,
+      "result_synthesis": true
+    }
+  }
+}

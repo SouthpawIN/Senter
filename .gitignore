@@ -1,0 +1,14 @@
+# Models (downloaded via setup.py)
+Models/
+
+# Generated content (can be recreated)
+Topics/creative/images/
+Topics/creative/music/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db

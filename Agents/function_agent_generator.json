@@ -1,0 +1,125 @@
+{
+  "manifest_version": "1.0",
+  "profiles": ["core", "exec"],
+  "agent": {
+    "id": "ajson://ai-toolbox/functions/function_agent_generator",
+    "name": "Function Agent Generator",
+    "version": "1.0.0",
+    "description": "Automatically generates JSON agent manifests for Python scripts in the Functions directory, checking for existing agents to avoid duplicates",
+    "author": "AI Toolbox",
+    "tags": ["function", "script", "agent-generation", "automation", "json-agents"]
+  },
+  "capabilities": [
+    {
+      "id": "generate-agent-manifests",
+      "description": "Generate standardized JSON agent manifests for Python functions"
+    },
+    {
+      "id": "check-duplicate-agents",
+      "description": "Check for existing agents to prevent duplicates using AI-powered matching"
+    },
+    {
+      "id": "analyze-python-scripts",
+      "description": "Analyze Python scripts to extract function signatures and documentation"
+    }
+  ],
+  "tools": [
+    {
+      "id": "generate_agents_for_functions",
+      "type": "function",
+      "description": "Scan Functions directory and generate agent manifests for all Python scripts",
+      "function": {
+        "name": "generate_agents_for_functions",
+        "description": "Automatically create JSON agents for new Python functions while avoiding duplicates",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "functions_dir": {
+              "type": "string",
+              "description": "Directory containing Python scripts (default: 'Functions')",
+              "default": "Functions"
+            },
+            "agents_dir": {
+              "type": "string",
+              "description": "Directory to save agent manifests (default: 'Agents')",
+              "default": "Agents"
+            },
+            "force_regenerate": {
+              "type": "boolean",
+              "description": "Force regeneration of all agents, ignoring duplicates",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "check_agent_exists",
+      "type": "function",
+      "description": "Check if an agent already exists for specific functionality",
+      "function": {
+        "name": "check_agent_exists",
+        "description": "Use AI-powered matching to find existing agents that provide similar functionality",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "script_name": {
+              "type": "string",
+              "description": "Name of the script to check"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the script's functionality"
+            }
+          },
+          "required": ["script_name"]
+        }
+      }
+    },
+    {
+      "id": "analyze_python_file",
+      "type": "function",
+      "description": "Analyze a Python file to extract function information",
+      "function": {
+        "name": "analyze_python_file",
+        "description": "Parse Python AST to extract function signatures, docstrings, and metadata",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "Path to the Python file to analyze"
+            }
+          },
+          "required": ["file_path"]
+        }
+      }
+    }
+  ],
+  "modalities": {
+    "input": ["text"],
+    "output": ["text", "json"]
+  },
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8",
+    "entrypoint": "function_agent_generator.py",
+    "dependencies": [
+      "ast",
+      "json",
+      "pathlib",
+      "senter_selector"
+    ],
+    "environment": {
+      "PYTHONPATH": "../scripts"
+    }
+  },
+  "extensions": {
+    "x-function": {
+      "auto_generated": false,
+      "capabilities": ["agent-management", "automation", "code-analysis"],
+      "pipeline": "embed-filtering + llm-selection",
+      "prevents_duplicates": true
+    }
+  }
+}

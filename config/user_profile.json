@@ -1,0 +1,41 @@
+{
+  "user_id": "default_user",
+  "name": "Default User",
+  "preferences": {
+    "response_style": "balanced",
+    "detail_level": "moderate",
+    "creativity_level": 0.7,
+    "technical_level": "intermediate",
+    "language": "en",
+    "timezone": "UTC"
+  },
+  "agent_preferences": {
+    "default_agent": "senter",
+    "favorite_agents": ["analyzer", "creative-writer"],
+    "blocked_agents": [],
+    "custom_settings": {}
+  },
+  "learning_profile": {
+    "topics_of_interest": ["programming", "ai", "music", "art"],
+    "skill_level": {
+      "technical": "intermediate",
+      "creative": "advanced",
+      "analytical": "advanced"
+    },
+    "learning_goals": [
+      "Improve programming skills",
+      "Learn AI development",
+      "Enhance creative writing"
+    ]
+  },
+  "context_settings": {
+    "chat_history_length": 10,
+    "topic_memory_days": 30,
+    "max_context_per_topic": 5000
+  },
+  "privacy_settings": {
+    "data_retention": true,
+    "analytics_enabled": false,
+    "share_learnings": false
+  }
+}
