@@ -267,8 +267,7 @@ class SenterMdParser:
 
     def list_all_focuses(self) -> List[str]:
         """List all available Focus directories"""
-        if not self.focuses_dir.exists():
-            return []
+        return []
 
         focuses = []
         for item in self.focuses_dir.iterdir():
