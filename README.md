@@ -37,8 +37,9 @@
 - Bug fixes: ✅ senter_md_parser AttributeError resolved
 
 ### ⚠️ Known Limitations:
-- **STT (Speech-to-Text)**: Not yet integrated
-- **Advanced Routing**: Router uses basic keyword matching (embeddings planned for future improvement)
+- **STT (Speech-to-Text)**: Not yet integrated (Q1 2026)
+- **Advanced Routing**: Router uses basic keyword matching (MCP integration will enable embeddings - Q2 2026)
+- **MCP Integration**: Roadmap defined, implementation pending (Q1 2026)
 
 ---
 
