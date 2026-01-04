@@ -13,13 +13,19 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 
 
+# Use os.path.join for cross-platform path handling
+def join_path(*parts):
+    """Join path components safely"""
+    return os.path.join(*parts)
+
+
 class SenterMdParser:
     """Parse SENTER.md files with YAML frontmatter + Markdown sections"""
 
     def __init__(self, senter_root: Path):
         self.senter_root = senter_root
-        self.focuses_dir = senter_root / "Focuses"
-        self.config_dir = senter_root / "config"
+        self.focuses_dir = join_path(senter_root, "Focuses")
+        self.config_dir = join_path(senter_root, "config")
         self.cache = {}  # Simple cache for parsed configs
 
     def load_focus_config(self, focus_name: str) -> Dict[str, Any]:
