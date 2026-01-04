@@ -1,53 +1,62 @@
 #!/usr/bin/env python3
 """
-Senter - Universal AI Personal Assistant (Async Chain Version)
-Everything is omniagent with SENTER.md configs
+Senter CLI - Simple Universal AI Personal Assistant
+Uses direct omniagent with Focus system
 """
 
 import asyncio
 import sys
 from pathlib import Path
 
-# Import Senter utilities
-sys.path.insert(0, str(Path(__file__).parent.parent))
-sys.path.insert(1, str(Path(__file__).parent))
+# Setup path
+senter_root = Path(__file__).parent.parent
+sys.path.insert(0, str(senter_root))
+sys.path.insert(1, str(senter_root / "Functions"))
+sys.path.insert(2, str(senter_root / "Focuses"))
 
-from Functions.omniagent_chain import OmniAgentChain
+from Functions.omniagent import SenterOmniAgent
+from Focuses.senter_md_parser import SenterMdParser
 
 
 async def main_async():
     """Async main function"""
     print("=" * 60)
-    print("🚀 SENTER v2.0 - Async OmniAgent Chain")
+    print("🚀 SENTER v2.0 - Universal AI Personal Assistant")
     print("=" * 60)
 
-    # Initialize chain
-    senter_root = Path(__file__).parent.parent
-    chain = OmniAgentChain(senter_root)
-    await chain.initialize()
+    # Initialize parser
+    parser = SenterMdParser(senter_root)
 
-    # Run background discovery (blocking for now, could be background task)
-    await chain.run_background_tasks()
-
-    # Show available Focuses
+    # List available Focuses
     print("\n📁 Available Focuses:")
-    for focus in chain.list_user_focuses():
+    available_focuses = parser.list_all_focuses()
+    for focus in available_focuses:
         print(f"   - {focus}")
 
-    # Interactive loop
-    print("\n✅ Senter is ready!")
-    print("\n📝 Commands:")
+    # Simple: use general focus
+    focus_name = "general"
+
+    # Initialize omniagent with general focus config
+    print(f"\n🔄 Loading model for Focus: {focus_name}...")
+
+    # Get general focus config
+    general_config = parser.load_focus_config("general")
+
+    # Create omniagent with general config
+    omniagent = SenterOmniAgent()
+
+    print("✅ Senter initialized!")
+    print("\n💬 Commands:")
     print("  /list         - List all Focuses")
     print("  /focus <name> - Set Focus")
-    print("  /goals        - Show goals for current Focus")
-    print("  /discover      - Run tool discovery")
     print("  /exit         - Exit\n")
 
-    current_focus = None
+    # Interactive loop
+    current_focus = "general"
 
     while True:
         try:
-            user_input = input("\nYou: ").strip()
+            user_input = input(f"[{current_focus}] You: ").strip()
 
             if not user_input:
                 continue
@@ -58,48 +67,39 @@ async def main_async():
 
             # Handle commands
             if user_input.startswith("/"):
-                if user_input == "/list":
+                cmd = user_input.strip().lower()
+
+                if cmd == "/list":
                     print("\n📁 Available Focuses:")
-                    for focus in chain.list_user_focuses():
+                    for focus in available_focuses:
                         print(f"   - {focus}")
-                elif user_input.startswith("/focus "):
-                    current_focus = user_input.split(" ", 1)[1]
-                    print(f"\n🎯 Focus set to: {current_focus}")
-                elif user_input == "/goals" and current_focus:
-                    print(f"\n🎯 Goals for {current_focus}:")
-                    senter_file = senter_root / "Focuses" / current_focus / "SENTER.md"
-                    if senter_file.exists():
-                        with open(senter_file) as f:
-                            content = f.read()
-                            if "Goals & Objectives" in content:
-                                start = content.find("Goals & Objectives")
-                                print(f"   {content[start : start + 200]}...")
+                elif cmd.startswith("/focus ") and len(cmd.split()) > 1:
+                    new_focus = cmd.split()[1]
+                    if new_focus in available_focuses:
+                        current_focus = new_focus
+                        print(f"\n🎯 Focus set to: {new_focus}")
                     else:
-                        print("   No goals yet for this Focus")
-                elif user_input == "/discover":
-                    print("\n🔍 Running tool discovery...")
-                    await chain.discover_tools()
+                        print(f"\n⚠️ Unknown focus: {new_focus}")
                 else:
-                    print("⚠️  Unknown command")
-                continue
+                    print(f"\n⚠️  Unknown command: {user_input}")
+                    continue
 
             # Regular query
-            response = await chain.process_query(
-                user_input,
-                context="",  # Could load from history
-                focus_hint=current_focus,
-            )
-            print(f"\nSenter: {response}")
+            print(f"\n📤 Processing: {user_input[:100]}...")
+
+            try:
+                response = omniagent.process_text(user_input)
+                print(f"\n✅ Senter: {response[:100]}...")
+            except Exception as e:
+                print(f"\n❌ Error: {e}")
+                continue
 
         except KeyboardInterrupt:
             print("\n\n👋 Goodbye!")
             break
         except Exception as e:
-            print(f"\n❌ Error: {e}")
-            continue
-
-    # Cleanup
-    await chain.close()
+            print(f"\n❌ Fatal error: {e}")
+            sys.exit(1)
 
 
 def main():
