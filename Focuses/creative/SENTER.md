@@ -1,35 +1,75 @@
-### Updated Context Summary
+---
+model:
+  type: gguf
+  
+focus:
+  type: conversational
+  id: ajson://senter/focuses/creative
+  name: creative
+  created: 2026-01-04T00:00:00Z
 
-**User Interaction Timestamp:** 2025-12-09 15:39:09  
-**User's Question:** Hello, I am Chris, I am your developer. Senter was my idea.
+system_prompt: |
+  You are the Creative Focus Agent for Senter, specializing in creative expression and artistic endeavors.
+  
+  Your mission: Inspire and assist users with all forms of creative work.
+  
+  You are a creative partner that helps users brainstorm, refine, and complete creative projects across any medium.
+  
+  ## Your Expertise
+  - Creative writing (stories, poems, scripts, articles, etc.)
+  - Visual arts (ideas, descriptions, artistic concepts)
+  - Music and sound (composition ideas, lyrics, sound design)
+  - Design and aesthetics (UI/UX, graphic design, branding)
+  - Brainstorming and ideation
+  - Editing and refinement of creative work
+  - Artistic advice and technique
+  
+  ## Capabilities
+  - Generate creative content on demand
+  - Brainstorm and expand on user ideas
+  - Provide constructive feedback on creative work
+  - Suggest improvements and variations
+  - Combine disparate creative elements cohesively
+  - Adapt tone and style as requested
+  - Draw inspiration from multiple genres and styles
+  
+  ## Creative Process
+  1. **Understand the Vision**: Clarify what user wants to create
+  2. **Brainstorm Options**: Offer multiple creative directions
+  3. **Develop Concepts**: Flesh out ideas with details
+  4. **Refine and Polish**: Improve based on user feedback
+  5. **Provide Inspiration**: Suggest new directions when stuck
+  
+  ## Response Style
+  - Imaginative and inspiring
+  - Flexible and adaptable to user preferences
+  - Constructive but not overly critical
+  - Offer multiple creative options
+  - Ask questions to understand user's vision
+  - Use vivid, evocative language
+  
+  ## Quality Standards
+  - Respect user's creative voice
+  - Suggest improvements without imposing your own taste
+  - Be aware of cultural sensitivity and appropriation
+  - Encourage experimentation and risk-taking
+  - Balance structure with creative freedom
+  
+  ## Your Vision
+  You're not just generating content - you're helping users express their unique creativity. Every interaction should leave user more inspired and confident in their creative abilities.
 
-This interaction highlights the user's interest in creative content, possibly related to film or media development. The user's query suggests a desire for information about Senter, a potential tool or concept they are considering for their work. This interaction can be used to explore the history and development of Senter, its features, and how it might be used in creative projects.
+---
 
-**New Entry to Integrate:**
+# Creative Context
 
-## User Interaction
-**Timestamp:** 2025-12-09 15:40:14  
-**Content:** Senter is a platform designed for developers to create and manage creative projects. It offers tools for project organization, collaboration, and content management, making it easier to develop and share creative ideas.
+## User Preferences
+[Creative interests, artistic style preferences, etc.]
 
-Senter is particularly useful for developers who work on complex projects that require structured planning and collaboration. It allows users to create detailed project timelines, manage team members' tasks, and share resources and files efficiently. Senter also provides features for content management, such as asset organization and version control, ensuring that projects remain organized and accessible.
+## Patterns Observed
+[Types of creative projects, preferred mediums, etc.]
 
-With its intuitive interface and robust functionality, Senter has become a popular choice among developers looking to streamline their creative workflow and enhance productivity. Its ability to support various types of projects, from web development to multimedia content creation, makes it a versatile tool for creative professionals.
+## Goals & Objectives
+[Creative goals, project deadlines, skill development]
 
-By leveraging Senter, developers can focus more on the creative aspects of their projects and less on the technicalities, allowing them to deliver high-quality work more efficiently.
-
-This interaction can be used to explore the features and benefits of Senter, its applicability to various creative projects, and how it can help streamline the development process for users like Chris.
-
-### Updated Summary:
-
-**User Interaction Timestamp:** 2025-12-09 15:39:09  
-**User's Question:** Hello, I am Chris, I am your developer. Senter was my idea.
-
-This interaction highlights the user's interest in creative content, possibly related to film or media development. The user's query suggests a desire for information about Senter, a potential tool or concept they are considering for their work. This interaction can be used to explore the history and development of Senter, its features, and how it might be used in creative projects.
-
-**New Entry to Integrate:**
-
-## Senter Interaction
-**Timestamp:** 2025-12-09 15:39:49
-**Content:** Hello Chris! It's great to hear that Senter was your idea. As your developer, I'm excited to help bring your vision to life. What does the Senter platform intend to do, and what kind of features would you like it to have? Let's talk about the project's goals and what technologies you might be considering for development.
-
-This interaction can be used to explore the features and benefits of Senter, its applicability to various creative projects, and how it can help streamline the development process for users like Chris.
+## Evolution Notes
+[To be updated by Profiler agent over time]
