@@ -37,9 +37,8 @@
 - Bug fixes: ✅ senter_md_parser AttributeError resolved
 
 ### ⚠️ Known Limitations:
-- **Web Search**: Not yet integrated (next priority)
 - **STT (Speech-to-Text)**: Not yet integrated
-- **Advanced Routing**: Router uses basic keyword matching (embeddings planned)
+- **Advanced Routing**: Router uses basic keyword matching (embeddings planned for future improvement)
 
 ---
 
