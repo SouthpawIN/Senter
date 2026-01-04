@@ -6,6 +6,7 @@ Uses direct omniagent with Focus system
 
 import asyncio
 import sys
+import argparse
 from pathlib import Path
 
 # Setup path
@@ -18,7 +19,7 @@ from Functions.omniagent import SenterOmniAgent
 from Focuses.senter_md_parser import SenterMdParser
 
 
-async def main_async():
+async def main_async(quiet=False):
     """Async main function"""
     print("=" * 60)
     print("🚀 SENTER v2.0 - Universal AI Personal Assistant")
@@ -37,19 +38,21 @@ async def main_async():
     focus_name = "general"
 
     # Initialize omniagent with general focus config
-    print(f"\n🔄 Loading model for Focus: {focus_name}...")
+    if not quiet:
+        print(f"\n🔄 Loading model for Focus: {focus_name}...")
 
     # Get general focus config
     general_config = parser.load_focus_config("general")
 
-    # Create omniagent with general config
-    omniagent = SenterOmniAgent()
+    # Create omniagent with general config (pass quiet mode)
+    omniagent = SenterOmniAgent(verbose=not quiet)
 
-    print("✅ Senter initialized!")
-    print("\n💬 Commands:")
-    print("  /list         - List all Focuses")
-    print("  /focus <name> - Set Focus")
-    print("  /exit         - Exit\n")
+    if not quiet:
+        print("✅ Senter initialized!")
+        print("\n💬 Commands:")
+        print("  /list         - List all Focuses")
+        print("  /focus <name> - Set Focus")
+        print("  /exit         - Exit\n")
 
     # Interactive loop
     current_focus = "general"
@@ -95,7 +98,8 @@ async def main_async():
                 continue
 
         except KeyboardInterrupt:
-            print("\n\n👋 Goodbye!")
+            if not quiet:
+                print("\n\n👋 Goodbye!")
             break
         except Exception as e:
             print(f"\n❌ Fatal error: {e}")
@@ -104,7 +108,13 @@ async def main_async():
 
 def main():
     """Sync entry point"""
-    asyncio.run(main_async())
+    parser = argparse.ArgumentParser(description="Senter CLI")
+    parser.add_argument(
+        "--quiet", "-q", action="store_true", help="Suppress debug output"
+    )
+    args = parser.parse_args()
+
+    asyncio.run(main_async(quiet=args.quiet))
 
 
 if __name__ == "__main__":
