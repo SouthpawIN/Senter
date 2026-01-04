@@ -1,192 +1,110 @@
 #!/usr/bin/env python3
 """
-Senter - Universal AI Personal Assistant
-JSON-driven agent system with Focus-based organization and SENTER.md context files
-LAZY LOADING - Models load only when needed
+Senter - Universal AI Personal Assistant (Async Chain Version)
+Everything is omniagent with SENTER.md configs
 """
 
-import os
+import asyncio
 import sys
-import json
-import argparse
-from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
-from datetime import datetime
 
-# Add directories to path (order matters)
-senter_root = Path(__file__).parent.parent
-sys.path.insert(0, str(senter_root))
-sys.path.insert(1, str(senter_root / "scripts"))
+# Import Senter utilities
+sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(1, str(Path(__file__).parent))
 
-from Focuses.senter_md_parser import SenterMdParser
-from Focuses.focus_factory import FocusFactory
+from Functions.omniagent_chain import OmniAgentChain
 
 
-class Senter:
-    """Universal AI Personal Assistant with lazy model loading"""
+async def main_async():
+    """Async main function"""
+    print("=" * 60)
+    print("🚀 SENTER v2.0 - Async OmniAgent Chain")
+    print("=" * 60)
 
-    def __init__(self):
-        self.focuses_dir = Path("Focuses")
-        self.agents_dir = Path("Agents")
-        self.outputs_dir = Path("outputs")
-        self.senter_root = senter_root
+    # Initialize chain
+    senter_root = Path(__file__).parent.parent
+    chain = OmniAgentChain(senter_root)
+    await chain.initialize()
 
-        self.focuses_dir.mkdir(exist_ok=True)
-        self.outputs_dir.mkdir(exist_ok=True)
+    # Run background discovery (blocking for now, could be background task)
+    await chain.run_background_tasks()
 
-        # Core components (lightweight)
-        self.parser = SenterMdParser(self.senter_root)
-        self.factory = FocusFactory(self.senter_root)
+    # Show available Focuses
+    print("\n📁 Available Focuses:")
+    for focus in chain.list_user_focuses():
+        print(f"   - {focus}")
 
-        # LAZY: Only load when needed
-        self.omni_agent = None
-        self.image_generator = None
-        self.music_initialized = False
+    # Interactive loop
+    print("\n✅ Senter is ready!")
+    print("\n📝 Commands:")
+    print("  /list         - List all Focuses")
+    print("  /focus <name> - Set Focus")
+    print("  /goals        - Show goals for current Focus")
+    print("  /discover      - Run tool discovery")
+    print("  /exit         - Exit\n")
 
-        # Agent registry
-        self.agents = self._load_agent_manifests()
-        self.focus_agents = self._load_focus_agents()
-        self.focus_agent_map = self._load_focus_agent_map()
-        self.locked_agent = None
+    current_focus = None
 
-        print("Senter initialized (models load on demand)")
-
-    def _load_agent_manifests(self) -> Dict[str, Dict]:
-        agents = {}
-        if self.agents_dir.exists():
-            for json_file in self.agents_dir.rglob("*.json"):
-                try:
-                    with open(json_file, "r") as f:
-                        agent_data = json.load(f)
-                        agent_id = agent_data["agent"]["id"].split("/")[-1]
-                        agents[agent_id] = agent_data
-                except Exception as e:
-                    print(f"Failed to load agent {json_file}: {e}")
-        return agents
-
-    def _load_focus_agents(self) -> Dict[str, Dict]:
-        focus_agents = {}
-        for focus_dir in self.focuses_dir.iterdir():
-            if focus_dir.is_dir():
-                senter_file = focus_dir / "SENTER.md"
-                if senter_file.exists():
-                    try:
-                        config = self.parser.load_focus_config(focus_dir.name)
-                        focus_agents[focus_dir.name] = config
-                    except Exception as e:
-                        print(f"Failed to load Focus {focus_dir.name}: {e}")
-        return focus_agents
-
-    def _load_focus_agent_map(self) -> Dict[str, str]:
-        map_file = self.senter_root / "config" / "focus_agent_map.json"
-        if map_file.exists():
-            try:
-                with open(map_file, "r") as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"Failed to load focus_agent_map: {e}")
-        default_map = {}
-        for focus_name, config in self.focus_agents.items():
-            agent_id = config.get("agent", {}).get("id", "senter")
-            if agent_id:
-                default_map[focus_name] = agent_id
-        return default_map
-
-    def _ensure_omni_agent(self):
-        """Lazy load SenterOmniAgent only when needed"""
-        if self.omni_agent is None:
-            print("Loading SenterOmniAgent...")
-            try:
-                from Functions.omniagent import SenterOmniAgent
-                self.omni_agent = SenterOmniAgent(senter_root=self.senter_root)
-                print("SenterOmniAgent ready!")
-            except Exception as e:
-                print(f"Failed to load SenterOmniAgent: {e}")
-                self.omni_agent = None
-
-    def chat(self, message: str, **kwargs) -> str:
-        focus, agent = self._route_request(message, **kwargs)
-        self._update_focus_context(focus, "user", message, **kwargs)
-        response = self._get_agent_response(agent, message, **kwargs)
-        self._update_focus_context(focus, "senter", response, **kwargs)
-        return response
-
-    def _route_request(self, message: str, **kwargs) -> Tuple[str, str]:
-        available_focuses = self.parser.list_all_focuses()
-        from senter_selector import select_topic_and_agent
-        selected_focus, agent, reasoning = select_topic_and_agent(
-            query=message,
-            available_topics=available_focuses,
-            available_agents=list(self.agents.keys()),
-            context="",
-        )
-        print(f"Focus: {selected_focus} | Agent: {agent}")
-        return selected_focus, agent
-
-    def _update_focus_context(self, focus: str, speaker: str, content: str, **kwargs):
-        focus_dir = self.focuses_dir / focus
-        senter_md_path = focus_dir / "SENTER.md"
-        if not senter_md_path.exists():
-            focus_dir.mkdir(exist_ok=True)
-            senter_md_path.write_text("", encoding="utf-8")
-        existing_content = senter_md_path.read_text(encoding="utf-8")
-        update_entry = f"\n## {speaker.title()} Interaction\nTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\nContent: {content}\n"
-        senter_md_path.write_text(existing_content + update_entry, encoding="utf-8")
-
-    def _get_agent_response(self, agent_type: str, message: str, **kwargs) -> str:
-        self._ensure_omni_agent()
-        if self.omni_agent is None:
-            return "SenterOmniAgent not available"
-        focus = kwargs.get("focus", "general")
-        focus_config = self.parser.load_focus_config(focus)
-        focus_system_prompt = focus_config.get("system_prompt", "")
-        combined_prompt = f"{focus_system_prompt}\n\nUser: {message}"
+    while True:
         try:
-            response = self.omni_agent.process_text(combined_prompt, max_tokens=512)
-            return response
-        except Exception as e:
-            return f"Error from agent: {e}"
+            user_input = input("\nYou: ").strip()
 
-    def list_focuses(self) -> List[str]:
-        return self.parser.list_all_focuses()
+            if not user_input:
+                continue
 
-    def create_focus(self, focus_name: str, initial_context: str = "") -> bool:
-        try:
-            focus_dir = self.factory.create_focus(focus_name, initial_context)
-            print(f"Created Focus: {focus_name}")
-            return True
+            if user_input.lower() in ["/exit", "quit", "q"]:
+                print("\n👋 Goodbye!")
+                break
+
+            # Handle commands
+            if user_input.startswith("/"):
+                if user_input == "/list":
+                    print("\n📁 Available Focuses:")
+                    for focus in chain.list_user_focuses():
+                        print(f"   - {focus}")
+                elif user_input.startswith("/focus "):
+                    current_focus = user_input.split(" ", 1)[1]
+                    print(f"\n🎯 Focus set to: {current_focus}")
+                elif user_input == "/goals" and current_focus:
+                    print(f"\n🎯 Goals for {current_focus}:")
+                    senter_file = senter_root / "Focuses" / current_focus / "SENTER.md"
+                    if senter_file.exists():
+                        with open(senter_file) as f:
+                            content = f.read()
+                            if "Goals & Objectives" in content:
+                                start = content.find("Goals & Objectives")
+                                print(f"   {content[start : start + 200]}...")
+                    else:
+                        print("   No goals yet for this Focus")
+                elif user_input == "/discover":
+                    print("\n🔍 Running tool discovery...")
+                    await chain.discover_tools()
+                else:
+                    print("⚠️  Unknown command")
+                continue
+
+            # Regular query
+            response = await chain.process_query(
+                user_input,
+                context="",  # Could load from history
+                focus_hint=current_focus,
+            )
+            print(f"\nSenter: {response}")
+
+        except KeyboardInterrupt:
+            print("\n\n👋 Goodbye!")
+            break
         except Exception as e:
-            print(f"Failed to create Focus {focus_name}: {e}")
-            return False
+            print(f"\n❌ Error: {e}")
+            continue
+
+    # Cleanup
+    await chain.close()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Senter - Universal AI Personal Assistant")
-    parser.add_argument("message", help="Your message to Senter")
-    parser.add_argument("--list-focuses", action="store_true", help="List available Focuses")
-    parser.add_argument("--create-focus", help="Create a new Focus")
-    parser.add_argument("--focus-description", help="Description for new Focus")
-    args = parser.parse_args()
-
-    senter = Senter()
-
-    if args.list_focuses:
-        print("\nAvailable Focuses:")
-        for focus in senter.list_focuses():
-            print(f"  - {focus}")
-
-    elif args.create_focus:
-        if not args.focus_description:
-            print("Error: --focus-description required")
-        else:
-            senter.create_focus(args.focus_description, args.focus_description)
-
-    elif args.message:
-        response = senter.chat(args.message)
-        print(f"\nResponse:\n{response}")
-
-    else:
-        parser.print_help()
+    """Sync entry point"""
+    asyncio.run(main_async())
 
 
 if __name__ == "__main__":
