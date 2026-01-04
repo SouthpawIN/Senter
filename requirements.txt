@@ -1,0 +1,84 @@
+# Senter Functions - Unified Requirements
+# Clean environment for: Music generation, Image generation, Multimodal video processing
+
+# ============================================================
+# CORE DEPENDENCIES (PyTorch & AI)
+# ============================================================
+torch>=2.0.0
+transformers>=4.40.0
+accelerate>=1.0.0
+bitsandbytes>=0.43.0
+torchvision>=0.15.0
+numpy>=1.24.0
+
+# ============================================================
+# MULTIMODAL PROCESSING
+# ============================================================
+Pillow>=10.0.0
+llama-cpp-python>=0.3.0
+pytubefix>=10.0.0
+
+# ============================================================
+# AUDIO PROCESSING
+# ============================================================
+soundfile>=0.13.0
+librosa==0.11.0
+torchaudio
+
+# ============================================================
+# UTILITIES
+# ============================================================
+requests>=2.31.0
+tqdm>=4.66.0
+loguru>=0.7.0
+
+# ============================================================
+# IMAGE GENERATION (Diffusers for Qwen Image)
+# ============================================================
+diffusers>=0.33.0
+
+# ============================================================
+# API SERVER (Optional)
+# ============================================================
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+gradio>=4.0.0
+
+# ============================================================
+# MUSIC GENERATION (ACE-Step)
+# ============================================================
+pytorch_lightning>=2.5.1
+peft>=0.12.0
+tensorboard>=2.18.0
+tensorboardX
+
+# ============================================================
+# TEXT/LANGUAGE PROCESSING
+# ============================================================
+pypinyin==0.53.0
+py3langid==0.3.0
+num2words==0.5.14
+hangul-romanize==0.1.0
+fugashi[unidic-lite]
+cutlet
+
+# ============================================================
+# DATASETS
+# ============================================================
+datasets>=3.4.1
+matplotlib>=3.10.1
+
+# ============================================================
+# NLP
+# ============================================================
+spacy>=3.8.4
+
+# ============================================================
+# SPECIAL INSTALLATIONS
+# ============================================================
+# For Qwen2.5-Omni and Qwen Image models, install transformers from git:
+# pip install git+https://github.com/huggingface/transformers
+#
+# For diffusers with latest Qwen support:
+# pip install git+https://github.com/huggingface/diffusers
