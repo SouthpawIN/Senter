@@ -32,7 +32,7 @@ Every interest you have (Bitcoin, AI, coding, creative writing, research, etc.) 
 #### 2. **Tool Auto-Discovery** (Functions/)
 Write any Python script, shell command, or tool, and Senter will:
 - Automatically discover it in your Functions/ directory
-- Create a Focus for it with a unique SENTER.md configuration
+- Call SENTER_Md_Writer agent to create a Focus for it
 - Integrate it seamlessly into conversations
 - Route relevant queries to that tool's Focus automatically
 - **No manual configuration** - just code, and Senter handles the rest
@@ -43,12 +43,13 @@ Senter's internal agents continuously work in the background:
 - **Planner**: Breaks down complex goals into actionable steps
 - **Profiler**: Analyzes your patterns, preferences, and interaction style
 - **Context_Gatherer**: Updates SENTER.md files with conversation summaries
-- **Tool_Discovery**: Scans for new tools and creates Focuses for them
+- **Tool_Discovery**: Scans for new tools and calls SENTER_Md_Writer to create Focuses
+- **SENTER_Md_Writer**: Generates perfect SENTER.md configuration files automatically
 
 #### 4. **Intelligent Query Processing** (OmniAgent Chain)
 When you ask Senter something, an async chain of agents processes your request:
 - **Router**: Selects the best Focus for your query
-- **Context_Gatherer**: Pulls relevant context from that Focus
+- **Context_Gatherer**: Pulls relevant context from that Focus's SENTER.md
 - **Goal_Detector**: Extracts any goals relevant to your query
 - **Tool_Discovery**: Finds tools that can help
 - **Chat Agent**: Provides a response with full context awareness
@@ -60,19 +61,227 @@ Senter is **your partner in learning and creating**, not your replacement:
 - Senter provides the knowledge, capabilities, organization, and synthesis
 - Together, you both become more effective than either alone
 
-### What Makes Senter Unique?
+---
 
-1. **Everything is OmniAgent + SENTER.md**: No complex scripts, no hidden logic - every capability is just an omniagent with a configuration file
-2. **Async Chain Architecture**: Multiple agents work in parallel for maximum performance
-3. **Model-Agnostic**: Bring your own model (GGUF, OpenAI API, vLLM) - Senter adapts to what you have
-4. **Privacy-First**: All processing happens locally, your data never leaves your machine
-5. **Truly Extensible**: Add any capability by creating a Focus directory with SENTER.md - no code changes needed
-6. **Self-Organizing**: Senter learns what matters to you, creating Focuses and tracking goals automatically
-7. **Markdown-First Configuration**: All configuration is in human-readable SENTER.md files, easy to understand and modify
+## 🚀 What Makes Senter Unique?
 
-### Real-World Examples
+1. **Universal SENTER.md Format**: Every agent is defined by a single markdown file with YAML frontmatter - no complex JSON configs, no hidden logic
+2. **Self-Organizing**: SENTER_Md_Writer agent automatically creates Focus configurations when new tools are discovered
+3. **Self-Documenting**: Every agent documents its own behavior in SENTER.md
+4. **Async Chain Architecture**: Multiple agents work in parallel for maximum performance
+5. **Model-Agnostic**: Bring your own model (GGUF, OpenAI API, vLLM) - Senter adapts to what you have
+6. **Privacy-First**: All processing happens locally, your data never leaves your machine
+7. **Truly Extensible**: Add any capability by creating a Focus directory with SENTER.md - no code changes needed
+8. **Future-Proof**: Designed to train specialized models (using Unsloth) for SENTER.md generation
 
-**Example 1: Bitcoin Trading Focus**
+---
+
+## 📁 Universal SENTER.md Format
+
+**Every agent in Senter is just an omniagent instance with a SENTER.md config file:**
+
+```yaml
+---
+model:
+  type: gguf|openai|vllm
+  path: /path/to/model.gguf  # For GGUF
+  endpoint: http://localhost:8000  # For OpenAI/vLLM
+  n_gpu_layers: -1
+  n_ctx: 8192
+  max_tokens: 512
+  temperature: 0.7
+  is_vlm: false
+
+focus:
+  type: internal|conversational|functional
+  id: ajson://senter/focuses/<focus_name>
+  name: Human-Readable Name
+  created: 2026-01-04T00:00:00Z
+  version: 1.0
+
+system_prompt: |
+  [Multi-line system prompt defining agent's purpose, behavior, and capabilities]
+---
+
+# Context Sections (Optional - parsed by agents)
+
+## User Preferences
+[To be updated by Profiler agent]
+
+## Patterns Observed
+[To be updated by Profiler agent]
+
+## Goals & Objectives
+[To be updated by Goal_Detector agent]
+
+## Evolution Notes
+[To be updated by Profiler agent]
+
+## Function Metadata (for functional Focuses)
+functions:
+  - name: function_name
+    description: What it does
+    parameters: [list of parameters]
+    returns: What it returns
+
+## Tool Information (for tool Focuses)
+tool_name: <name>
+tool_path: /path/to/tool/script
+usage_examples:
+  - Example 1
+  - Example 2
+```
+
+**Key Points:**
+- YAML frontmatter contains all configuration
+- Optional markdown sections are parsed at inference time
+- Sections can be "None" for agents that don't need them
+- Universal format enables automatic SENTER.md generation
+
+---
+
+## 🤖 SENTER_Md_Writer: Self-Maintaining System
+
+The **SENTER_Md_Writer agent** enables Senter to be truly self-organizing:
+
+### When SENTER_Md_Writer is Called:
+
+1. **Tool Discovery**: New Python function found in Functions/
+   - Analyze function signature
+   - Determine if conversational or functional
+   - Generate perfect SENTER.md with appropriate system_prompt
+   - Create Focus directory and SENTER.md file
+
+2. **User Request**: "Create a Focus for X"
+   - Ask clarifying questions (purpose, type, capabilities)
+   - Generate SENTER.md with proper configuration
+   - Create Focus structure
+
+3. **Context Updates**: Focus needs SENTER.md update
+   - Read existing SENTER.md
+   - Preserve YAML frontmatter
+   - Update markdown sections with new context
+   - Write updated SENTER.md
+
+4. **Migration**: Converting legacy formats
+   - Parse old agent.json
+   - Generate new SENTER.md
+   - Delete old file
+
+### This Enables:
+
+- **Self-Organizing**: No manual configuration for new tools
+- **Self-Documenting**: Every agent documents its own behavior
+- **Self-Evolving**: Focuses improve their own configs over time
+- **Automated Growth**: System grows without human intervention
+
+### Future: Unsloth-Trained SENTER.md Generator
+
+**Vision**: Train a specialized model using Unsloth to generate perfect SENTER.md files.
+
+**Training Data:**
+- All existing SENTER.md files (internal, conversational, functional)
+- High-quality examples across all Focus types
+- Standardized format examples
+
+**Benefits:**
+- Faster SENTER.md generation
+- Higher quality configurations
+- Consistent format adherence
+- Self-improving agent ecosystem
+
+This will make SENTER_Md_Writer a specialized expert, not just a general LLM following instructions.
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              Senter OmniAgent Chain                     │
+└─────────────────────────────────────────────────────────────────┘
+                               │
+               ┌───────────────┴───────────────┐
+               │                                │
+          ┌────▼────┐                   ┌────▼────┐
+          │  Router  │                   │  Chat     │
+          │  Agent   │                   │  Agent    │
+          └────┬────┘                   └────┬────┘
+               │                                │
+     ┌─────────┼────────────────┴────────────┐
+     │         │                           │       │
+ ┌───▼───┐┌───▼───┐┌───▼───┐┌───▼───┐┌───▼───┐
+ │ Goal_  ││ Tool_  ││Context_││Plan-   ││Profil- │
+ │Detec- ││Discov- ││Gather-││ner    ││er     │
+ │tor     ││ery    ││er     ││Agent   ││Agent  │
+ └───┬───┘└───┬───┘└───┬───┘└───┬───┘└───┬───┘
+    │         │         │         │         │         │
+    │         │         │         │         │         │
+    └────┬────┴─────────┴─────────┴─────────┴─────────┘
+         │
+         │ Calls SENTER_Md_Writer
+         │
+         ▼
+ ┌─────────────────────────────────────────────────────────┐
+ │     SENTER_Md_Writer (Universal Architect)    │
+ │  Generates SENTER.md for all Focuses          │
+ │  Future: Unsloth-trained specialized model      │
+ └─────────────────────────────────────────────────────────┘
+         │
+         ▼
+ ┌─────────────────────────────────────────────────────────┐
+ │         User Focuses (omniagents)           │
+ │  coding, research, creative, etc.           │
+ │  Each with SENTER.md config               │
+ └─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📦 Installation
+
+### Quick Start
+
+1. **Clone or copy Senter:**
+```bash
+cd /path/to/ai-toolbox/Senter
+```
+
+2. **Run setup wizard:**
+```bash
+python3 scripts/setup_senter.py
+```
+
+This will:
+- Download infrastructure models (Qwen2.5-Omni-3B + Nomic Embed)
+- Configure your central model
+  - Option A: Download recommended (Hermes 3B or Qwen VL 8B)
+  - Option B: Use existing local model
+  - Option C: Use OpenAI-compatible API
+- Verify all components work
+
+3. **Launch Senter:**
+```bash
+# Option 1: CLI
+python3 scripts/senter.py "Your message here"
+
+# Option 2: TUI
+python3 scripts/senter_app.py
+```
+
+### First Run
+
+When you first run Senter:
+- Models load on demand (lazy loading prevents memory issues)
+- Default Focuses are available: general, coding, creative, research, user_personal
+- Dynamic Focus creation enabled - ask about any topic, Senter creates Focus
+
+---
+
+## 💡 Real-World Examples
+
+### Example 1: Bitcoin Trading Focus
+
 ```
 You: "I want to learn about Bitcoin trading strategies"
 
@@ -93,580 +302,139 @@ Senter [Context_Gatherer]: Updates Bitcoin Focus SENTER.md with:
   - Web sources checked
 ```
 
-**Example 2: Automatically Discovered Tool**
+### Example 2: Automatically Discovered Tool
+
 ```
 # User writes a Python script
 cat > Functions/encrypt_file.py <<'EOF'
 import os
-from cryptography.fernet import Fernet
 
-def encrypt_file(filepath, key):
-    with open(filepath, 'rb') as f:
-        data = f.read()
-    fernet = Fernet(key)
-        encrypted = fernet.encrypt(data)
-    
-    with open(filepath + '.enc', 'wb') as f:
-        f.write(encrypted)
-    
-    return "File encrypted successfully"
+def encrypt_file(file_path, key):
+    """Encrypt a file using AES encryption"""
+    # Encryption logic here
+    pass
 EOF
 
-# Senter automatically discovers this
-Senter [Tool_Discovery]: Found new tool: encrypt_file
-Senter [Tool_Discovery]: Creates Focuses/encrypt_file/SENTER.md:
-  system_prompt: |
-    You are an Encryption Agent.
-    Your job: Encrypt files securely.
-    Available functions: encrypt_file
+Senter [Tool_Discovery]: Found encrypt_file function
+Senter [Tool_Discovery]: Calls SENTER_Md_Writer
+Senter [SENTER_Md_Writer]: Creates Focuses/encrypt_file/SENTER.md
+  - System prompt: "You are encryption tool. Encrypt files securely."
+  - Function metadata: {name: encrypt_file, parameters: [file_path, key]}
 
-# Now user can use it
-You: "Encrypt my notes.txt with key 'secret'"
+You: "Encrypt my document.pdf"
+
 Senter [Router]: Routes to encrypt_file Focus
-Senter [encrypt_file Focus]: Notes.txt.enc created
+Senter [encrypt_file Focus]: Calls Python function
+Senter [encrypt_file Focus]: ✅ File encrypted successfully
 ```
 
-**Example 3: Goal Progression**
-```
-You: "I'm working on a music album"
-
-Senter [Goal_Detector]: Goal detected: "Complete music album"
-Senter [Planner]: Breaks down into steps:
-  1. Write 5-7 songs
-  2. Record each song
-  3. Mix and master
-  4. Design album art
-  5. Release on streaming platforms
-
-[Week 1]
-You: "I've written 3 songs"
-Senter [Planner]: Updates goals in creative Focus SENTER.md
-  - ✅ Write 5-7 songs (progress: 3/7)
-  - Next: Record songs
-
-[Week 2]
-You: "I need help mixing the songs"
-Senter [Context_Gatherer]: Adds note to creative Focus: "User needs help with audio mixing"
-Senter [Chat]: Suggests audio mixing tools from Functions/
-```
-
-## 🏗️ Architecture
-
-### The OmniAgent Chain
-
-**Principle**: Everything is an omniagent with SENTER.md
+### Example 3: Self-Evolving Focus
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│              Senter OmniAgent Chain                     │
-└─────────────────────────────────────────────────────────┘
-                              │
-              ┌───────────────┴──────────────┐
-              │                                │
-         ┌────▼────┐                   ┌────▼────┐
-         │  Router  │                   │  Chat     │
-         │  Agent   │                   │  Agent    │
-         └────┬────┘                   └────┬────┘
-              │                                │
-         ┌────────────────┼────────────────┐
-         │                          │         │
-    ┌────▼─────┐┌────▼─────┐┌────▼─────┐
-│ Goal_      ││ Tool_    ││Context_   ││Plan-     ││Profil-    │
-│Detector    ││Discovery ││Gatherer  ││ner       ││er Agent  │
-└─────┬─────┘└─────┬─────┘└─────┬─────┘└─────┬─────┘
-      │         │         │         │         │         │
-      │         │         │         │         │
-   └─────────┴─────────┴─────────┴─────────┴─────────┘
-        │
-        │ Updates SENTER.md files with:
-        │ - Goals, Context, Patterns
-        │
-        ▼
-┌─────────────────────────────────────────────────────────┐
-│         User Focuses (omniagents)               │
-├─────────────────────────────────────────────────────────┤
-│  coding  │  research  │  creative  │  general  │
-└─────────────────────────────────────────────────────────┘
-        Each Focus has SENTER.md config
-```
+You: [Asks many Python questions over weeks]
 
-### Internal Focus Agents
+Senter [Profiler]: Learns pattern - user prefers Python
+Senter [Profiler]: Updates coding Focus SENTER.md:
+  ## User Preferences
+  - Preferred language: Python
+  - Style preference: Modern, typed, clear comments
 
-| Agent | Purpose | Location | Output |
-|-------|---------|----------|--------|
-| **Router** | Route queries to best Focus | `Focuses/internal/Router/SENTER.md` | JSON: focus, reasoning |
-| **Goal_Detector** | Extract goals from conversations | `Focuses/internal/Goal_Detector/SENTER.md` | JSON: goals list |
-| **Tool_Discovery** | Discover tools in Functions/ | `Focuses/internal/Tool_Discovery/SENTER.md` | Creates Focuses for tools |
-| **Context_Gatherer** | Update SENTER.md with context | `Focuses/internal/Context_Gatherer/SENTER.md` | Direct file updates |
-| **Planner** | Break down goals into tasks | `Focuses/internal/Planner/SENTER.md` | JSON: tasks list |
-| **Profiler** | Analyze user patterns | `Focuses/internal/Profiler/SENTER.md` | JSON: preferences + patterns |
-| **Chat** | Main conversational agent | `Focuses/internal/Chat/SENTER.md` | Natural responses |
+Senter [Context_Gatherer]: Updates with conversation summaries
+Senter [Goal_Detector]: Extracts goal: "Master Python best practices"
 
-### User Focus Agents
+You: "Show me Pythonic code for this"
 
-| Focus | Purpose | Features |
-|-------|---------|----------|
-| **coding** | Programming, debugging | Code examples, best practices |
-| **research** | Information gathering | Fact-checking, source verification |
-| **creative** | Art, music, writing | Style guidance, creative support |
-| **user_personal** | Organization | Scheduling, goals, preferences |
-| **general** | Catch-all | Versatile assistance, delegation |
-
----
-
-## 🚀 Quick Start
-
-### Installation
-
-1. **Clone Senter:**
-   ```bash
-   git clone https://github.com/SouthpawIN/Senter
-   cd Senter
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run setup wizard:**
-   ```bash
-   python3 scripts/setup_senter.py
-   ```
-
-This will:
-- Download infrastructure models (Qwen2.5-Omni-3B + Nomic Embed)
-- Configure your central model
-- Create initial Focuses
-- Verify all components work
-
-### Running Senter
-
-**CLI Mode:**
-```bash
-# Start Senter with async chain
-python3 scripts/senter.py
-
-# Available commands:
-/list       - List all Focuses
-/focus <name> - Set current Focus
-/goals       - Show goals for current Focus
-/discover    - Run tool discovery
-/exit       - Exit
-```
-
-**TUI Mode** (in progress):
-```bash
-# TUI with async chain (coming soon)
-python3 scripts/senter_app.py
+Senter [coding Focus]: Uses updated preferences
+Senter [coding Focus]: ✅ Here's Pythonic code with type hints...
 ```
 
 ---
 
-## 🎯 Focus System
+## 🔧 Configuration
 
-### Focus Types
+### Model Configuration
 
-| Type | Has Wiki | Example | Purpose |
-|------|-----------|---------|---------|
-| **Conversational** | ✅ Yes | `Bitcoin/`, `AI/`, `Coding/` | Research topics with evolving knowledge |
-| **Functional** | ❌ No | `WiFi_Lights/`, `Calendar/` | Single-purpose task execution |
-| **Internal** | ❌ No | `Router/`, `Planner/` | Senter's own operation |
+Senter supports three model backends:
 
-### Creating New Focuses
+1. **GGUF (Local LLaMA-based models)**
+   - Recommended: Hermes-3-Llama-3.2-3B (lightweight, fast)
+   - Alternative: Qwen VL 8B (vision capable)
+   - GPU acceleration with llama-cpp
 
-To add ANY new capability to Senter:
+2. **OpenAI-Compatible API**
+   - OpenAI, Groq, DeepSeek, etc.
+   - Requires API key in config/user_profile.json
 
-1. **Create Focus directory:**
-   ```bash
-   mkdir -p Focuses/MyNewFocus
-   ```
+3. **vLLM (OpenAI-compatible server)**
+   - Run your own model server
+   - Fast inference with batched requests
 
-2. **Create SENTER.md:**
-   ```bash
-   cat > Focuses/MyNewFocus/SENTER.md <<'EOF'
-   ---
-   model:
-     type: gguf  # Inherit from user_profile.json
-   
-   system_prompt: |
-     You are a MyNewFocus Agent.
-     Your job: [describe what it does]
-   
-   focus:
-     type: conversational  # or functional
-     id: ajson://senter/focuses/mynewfocus
-     name: MyNewFocus
-     created: 2026-01-03T00:00:00Z
-   ---
-   
-   ## User Preferences
-   
-   ## Patterns Observed
-   
-   ## Goals & Objectives
-   
-   ## Evolution Notes
-   EOF
-   ```
+### Focus Configuration
 
-3. **Restart Senter:**
-   ```bash
-   python3 scripts/senter.py
-   ```
+Create new Focuses by:
 
-That's it! No code changes needed.
+1. **Automatic**: Write a Python tool in Functions/, Senter discovers it
+2. **Manual**: Create directory Focuses/my_focus/SENTER.md with proper format
+3. **Request**: Ask Senter "Create a Focus for X" - SENTER_Md_Writer generates it
 
 ---
 
-## 📝 Query Processing Flow
+## 📊 Performance Metrics
 
-When you ask Senter something, an async chain of agents processes your request:
+**Code Reduction Achieved: 65%**
+- Eliminated complex scripts (agent_registry, background_processor, etc.)
+- Everything is now omniagent + SENTER.md
+- 9 obsolete scripts moved to scripts/.obsolete/
 
-```
-User Input
-    │
-    ▼
-┌─────────────────────────────────────────────────────┐
-│              Senter OmniAgent Chain             │
-└─────────────────────────────────────────────────────┘
-    │
-    ▼
-[1. Router] → Selects target Focus (coding, research, etc.)
-    │
-    ├───┴─────────────┬──────────────────┐
-    │                  │                  │
-[2. Parallel Execution]                    │
-    │                  │                  │
-┌──▼──────┐    ┌──▼───────┐    ┌──▼───────────┐
-│Context_  │    │Goal_     │    │Tool_        │
-│Gatherer │    │Detector  │    │Discovery    │
-└────┬────┘    └────┬─────┘    └────┬─────┘
-     │              │              │
-     │              │              └─────┬─────┐
-     │                             │        │
-     ▼                             ▼        ▼
-All three gather information & update SENTER.md files
-     │              │
-     │              ▼
-          Updates Focus's SENTER.md with:
-          - Goals & Objectives
-          - Context (conversations summary)
-          - Patterns Observed
-          - Evolution Notes
-     │
-     ▼
-[3. Chat Agent] → Processes query with full context
-    │
-    ├─ Reads Focus's SENTER.md
-    ├─ Considers goals & patterns
-    ├─ Uses available tools if needed
-    └─ Provides intelligent response
-```
-
-### Goal & Action Integration
-
-Senter doesn't just detect goals - it tracks them through your entire journey:
-
-1. **Detection**: Goal_Detector extracts goals from conversations
-2. **Planning**: Planner breaks goals into actionable steps
-3. **Execution**: Chat agent helps you complete each step
-4. **Discovery**: Tool_Discovery finds tools to help
-5. **Progression**: Context_Gatherer tracks your progress
-6. **Feedback**: Profiler analyzes what works for you
-
-All of this happens continuously, in parallel, in the background.
+**System Architecture:**
+- 7 Internal agents (Router, Goal_Detector, etc.)
+- 5 Default user Focuses (general, coding, research, creative, user_personal)
+- Unlimited custom Focuses (auto-created by Tool_Discovery)
 
 ---
 
-## 📁 Directory Structure
+## 🚧 Development Roadmap
 
-```
-Senter/
-├── Focuses/              # Focus system (replaces Topics/)
-│   ├── internal/          # Internal agents (markdown writers)
-│   │   ├── Router/           # Routes queries to best Focus
-│   │   ├── Goal_Detector/   # Extracts goals from conversations
-│   │   ├── Tool_Discovery/   # Discovers tools in Functions/
-│   │   ├── Context_Gatherer/  # Updates SENTER.md files
-│   │   ├── Planner/          # Breaks down goals into tasks
-│   │   ├── Profiler/         # Analyzes user patterns
-│   │   └── Chat/           # Main conversational agent
-│   ├── coding/             # User Focuses
-│   ├── research/
-│   ├── creative/
-│   ├── user_personal/
-│   └── general/
-│   ├── __init__.py
-│   ├── senter_md_parser.py
-│   └── focus_factory.py
-│
-├── Functions/             # Core AI pipelines
-│   ├── omniagent.py           # Model-agnostic orchestrator
-│   ├── omniagent_async.py    # Async wrapper (NEW)
-│   ├── omniagent_chain.py    # Chain orchestrator (NEW)
-│   ├── senter_md_parser.py   # SENTER.md parser
-│   ├── embedding_utils.py    # Vector search
-│   ├── compose_music.py       # Music generation
-│   ├── qwen_image_gguf_generator.py  # Image generation
-│   └── ...                # Other Functions
-│
-├── scripts/                # Application code
-│   ├── senter.py             # CLI interface (REFACTORED)
-│   ├── senter_app.py         # TUI interface (in progress)
-│   ├── senter_widgets.py      # UI components
-│   ├── .obsolete/            # Old scripts (backup)
-│   └── ...                 # Other scripts
-│
-├── config/                  # Configuration
-│   ├── senter_config.json    # Infrastructure models
-│   └── user_profile.json      # User model + preferences
-│
-├── ARCHITECTURE.md          # Comprehensive architecture documentation
-├── README.md                # This file
-└── ...                      # Other files
-```
+### Completed ✅
+- Universal SENTER.md format
+- SENTER_Md_Writer agent for automatic configuration
+- OmniAgent async chain architecture
+- Internal agents (Router, Goal_Detector, Context_Gatherer, etc.)
+- Model-agnostic support (GGUF, OpenAI, vLLM)
+- Privacy-first (local processing)
+
+### In Progress 🚧
+- Improve SENTER_Md_Writer quality
+- Add more internal agent integration
+- Better error handling and recovery
+- Enhanced profiling and personalization
+
+### Future 🔮
+- **Unsloth-trained SENTER.md generator**: Specialized model for perfect configuration
+- Multi-modal Focuses (image, audio, video)
+- Web browsing integration
+- Multi-user support
+- Plugin system for external integrations
 
 ---
 
-## 🧩 Configuration
+## 📚 Documentation
 
-### senter_config.json
-
-```json
-{
-  "infrastructure_models": {
-    "multimodal_decoder": {
-      "path": "/path/to/Qwen2.5-Omni-3B.gguf",
-      "description": "Omni 3B for multimodal decoding ONLY"
-    },
-    "embedding_model": {
-      "path": "/path/to/nomic-embed-text.gguf",
-      "description": "Embeddings for intelligent search"
-    }
-  },
-  
-  "focus_creation": {
-    "embed_filter_threshold": 4,
-    "low_confidence_threshold": 0.5,
-    "allow_dynamic_creation": true
-  },
-  
-  "learning": {
-    "senter_md_enabled": true,
-    "wiki_enabled": true,
-    "goal_detection": true,
-    "tool_discovery": true
-  }
-}
-```
-
-### user_profile.json
-
-```json
-{
-  "central_model": {
-    "type": "gguf",
-    "path": "/path/to/your-model.gguf",
-    "is_vlm": false,
-    "settings": {
-      "max_tokens": 512,
-      "temperature": 0.7
-    }
-  },
-  
-  "preferences": {
-    "response_style": "balanced",
-    "detail_level": "moderate",
-    "creativity_level": 0.7,
-    "technical_level": "intermediate",
-    "language": "en",
-    "timezone": "UTC"
-  }
-}
-```
+- [README.md](README.md) - This file, user guide
+- [SENTER_FORMAT_SPECIFICATION.md](SENTER_FORMAT_SPECIFICATION.md) - Complete format documentation
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Technical architecture
+- [SENTER_DOCUMENTATION.md](SENTER_DOCUMENTATION.md) - Detailed developer docs
 
 ---
 
-## 🎓 Philosophy
+## 🤝 Contributing
 
-### The OmniAgent Pattern
+Senter is designed to be **self-organizing**. The best way to contribute:
 
-**Everything is an omniagent with a unique SENTER.md configuration.**
-
-This simple principle enables:
-1. **Universal extensibility** - Add any capability = Create Focus + SENTER.md
-2. **Self-documentation** - Each agent's logic is in its own config file
-3. **Radical simplicity** - 65% less code, easier to understand and modify
-4. **Model flexibility** - Switch models by changing one line in user_profile.json
-5. **Focus-driven organization** - Knowledge organized by what matters to you
-6. **Async performance** - Parallel agent calls for maximum speed
-
-### Four Pillars
-
-1. **Focuses are Living Knowledge Bases**: 
-   - They evolve based on your conversations
-   - They track goals and progress
-   - They're not static categories
-   - They can be created dynamically
-
-2. **Tools are Automatically Discovered**:
-   - Write code in Functions/
-   - Senter discovers and creates Focuses
-   - No manual configuration needed
-   - Seamless integration into conversations
-
-3. **Goals are Unlimited and Focus-Specific**:
-   - No arbitrary caps
-   - Each Focus has its own goals
-   - Goals are tracked through completion
-   - Progress is automatically updated
-
-4. **Context is Continuously Gathered**:
-   - Conversations are analyzed
-   - Patterns are detected
-   - Knowledge is consolidated
-   - SENTER.md files are updated
-
-### The Symbiotic Partnership
-
-**AI brings:**
-- Knowledge synthesis and organization
-- Pattern recognition and goal tracking
-- Tool discovery and integration
-- Context awareness and memory
-- Intelligent query routing
-
-**Human brings:**
-- Creativity and direction
-- Goals and purpose
-- Tools and capabilities
-- Domain expertise
-- Values and preferences
-
-**Together:**
-- More effective than either alone
-- Continuous mutual improvement
-- Shared understanding of goals
-- Collaborative problem-solving
-
----
-
-## 📊 Performance
-
-### Async Benefits
-
-- **Parallel Processing**: Multiple agents run simultaneously
-- **Non-Blocking I/O**: File operations don't block responses
-- **Responsive UI**: Even during heavy processing
-- **Resource Efficiency**: Thread pool management
-
-### Code Reduction
-
-- **Old Architecture**: ~3500 lines across 20+ scripts
-- **New Architecture**: ~1200 lines (omniagent_async.py + omniagent_chain.py + configs)
-- **Reduction**: 65% less code
-- **Maintainability**: Single pattern (omniagent + SENTER.md)
-
----
-
-## 📋 Requirements
-
-### Core Dependencies
-
-```txt
-llama-cpp-python>=0.3.0    # Model inference
-textual>=0.50.0           # UI framework
-Pillow>=10.0.0             # Image processing
-pyyaml                        # YAML parsing for SENTER.md
-```
-
-### Media Dependencies
-
-```txt
-yt-dlp>=2024.1.1          # Video downloads
-soundfile>=0.13.0          # Audio I/O
-ffmpeg                        # Video/audio processing
-```
-
-### System Requirements
-
-- **RAM**: 16GB minimum, 32GB recommended
-- **GPU**: CUDA-compatible with 8GB+ VRAM
-- **Storage**: 20GB for models + generated content
-
----
-
-## 🤝 Development
-
-### Adding New Internal Agents
-
-Each internal agent is a markdown writer with specific sections:
-
-**Router** (routes queries):
-- Output format section
-- Routing patterns section
-- Evolution notes
-
-**Goal_Detector** (extracts goals):
-- Detection patterns section
-- Output format section
-- Examples section
-
-**Tool_Discovery** (discovers tools):
-- Discovery process section
-- Focus creation section
-- Integration guidelines
-
-**Context_Gatherer** (gathers context):
-- Update strategies section
-- SENTER.md sections to update
-- Retention policies
-
-**Planner** (breaks down goals):
-- Planning principles section
-- Task creation section
-- Progress tracking section
-
-**Profiler** (analyzes patterns):
-- Analysis guidelines section
-- Profile sections to update
-- Confidence thresholds
-
-**Chat** (conversational agent):
-- Conversation style section
-- Context usage section
-- Goal awareness section
-
-### Adding New User Focuses
-
-Create directories with SENTER.md files that:
-- Define the Focus's purpose
-- List available functions/tools
-- Specify output format (if any)
-- Include initial context
-- Leave room for evolution
-
----
-
-## 🔄 Migration from v1.0
-
-### What Changed
-
-- **Removed**: 20+ specialized scripts (~2300 lines)
-- **Added**: omniagent_async.py + omniagent_chain.py (~650 lines)
-- **Refactored**: Everything uses async chain architecture
-- **Replaced**: Pattern-matching with LLM-based goal detection
-- **Simplified**: Tool discovery via omniagent instead of AST
-- **Enhanced**: Unlimited, Focus-specific goals
-
-### Migration Guide
-
-1. **Backup existing configuration**
-2. **Run `setup_senter.py`** to reconfigure
-3. **Old Focuses still work** (SENTER.md structure preserved)
-4. **Goals now unlimited** per Focus (no more cap of 3)
-5. **Internal agents** now in SENTER.md format
+1. **Create new tools**: Write Python scripts in Functions/, Senter auto-discovers them
+2. **Improve internal agents**: Enhance SENTER.md files for Router, Goal_Detector, etc.
+3. **Bug reports**: Test thoroughly, provide reproduction steps
+4. **Documentation**: Keep README and docs in sync with code
 
 ---
 
@@ -676,8 +444,34 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ as a symbiotic AI-human partnership**
-**Version**: 2.0.0 - Async Chain Architecture
-**Status**: ✅ Core Implementation Complete, Documentation Complete
-**Repository**: https://github.com/SouthpawIN/Senter
-**Inspiring**: "Building a future where AI and humans unlock their full potential together"
+## 🙏 Acknowledgments
+
+- **Qwen Team**: Qwen2.5-Omni-3B model (multimodal infrastructure)
+- **Nomic AI**: Nomic Embed Text model (semantic search)
+- **Soprano**: TTS model (streaming speech synthesis)
+- **Unsloth Team**: Fine-tuning framework (future SENTER.md training)
+
+---
+
+## 🌍 Senter in the Wild
+
+Senter is:
+- **Open Source**: Fully transparent, auditable codebase
+- **Privacy-First**: No data leaves your machine
+- **Model-Agnostic**: Use any model you have
+- **Self-Maintaining**: Agents create and configure other agents
+- **Truly Extensible**: Add capabilities without code changes
+
+**Built with love for a symbiotic AI-human future.** 🌟
+
+---
+
+## 📞 Support
+
+- **GitHub Issues**: https://github.com/SouthpawIN/Senter/issues
+- **Documentation**: https://github.com/SouthpawIN/Senter/wiki
+- **Community**: Share your Focuses and tools with the world!
+
+---
+
+**Join us in building the future of human-AI collaboration!** 🚀
