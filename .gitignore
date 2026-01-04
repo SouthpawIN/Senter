@@ -40,3 +40,5 @@ config/user_profile.json
 # Temporary files
 *.tmp
 *.bak
+# Legacy JSON configurations (replaced by SENTER.md)
+Agents/
