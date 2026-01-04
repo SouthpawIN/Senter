@@ -67,6 +67,7 @@ class SenterOmniAgent:
         omni_config: Optional[Dict[str, Any]] = None,
         embed_config: Optional[Dict[str, Any]] = None,
         tts_config: Optional[Dict[str, Any]] = None,
+        verbose: bool = True,
     ):
         """
         Initialize SenterOmniAgent
