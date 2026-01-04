@@ -18,6 +18,7 @@
 - **Universal SENTER.md Format**: All agents configured via YAML frontmatter
 - **Dynamic Focuses**: Auto-discovery and creation (no hardcoded lists)
 - **SENTER_Md_Writer**: Self-organizing system for automatic configuration
+- **Parser Fixed**: senter_md_parser AttributeError fixed
 
 ### 🔧 Current State:
 - **Core System**: ✅ Fully functional (Python CLI & TUI)
@@ -30,9 +31,15 @@
 - Basic chat: ✅ Working
 - Focus switching: ✅ Working
 - Goal detection: ✅ Working
-- SENTER.md parsing: ✅ Working
+- SENTER.md parsing: ✅ Working (all 7 Focuses discovered)
 - Router agent: ✅ Basic routing
-- Tool discovery: ✅ Scans Functions/
+- Tool discovery: ✅ Scans Functions/ directory
+- Bug fixes: ✅ senter_md_parser AttributeError resolved
+
+### ⚠️ Known Limitations:
+- **Web Search**: Not yet integrated (next priority)
+- **STT (Speech-to-Text)**: Not yet integrated
+- **Advanced Routing**: Router uses basic keyword matching (embeddings planned)
 
 ---
 
