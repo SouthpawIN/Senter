@@ -1,0 +1,82 @@
+evolution:
+  exploration_rate: 0.2
+  fitness_function: composite
+  learning_rate: 0.1
+  memory_decay: 0.01
+  mutation_rate: 0.05
+  mutation_types:
+  - prompt_refinement
+  - capability_expansion
+  - memory_pruning
+  selection_pressure: user_satisfaction
+integration:
+  api_protocols:
+  - http
+  - websocket
+  embedding_services:
+  - nomic
+  model_backends:
+  - gguf
+  - openai
+  - vllm
+  security_model: local_first
+  storage_backends:
+  - local
+  - cloud
+interaction:
+  explanation_depth: adaptive
+  feedback_channels:
+  - response
+  - reasoning
+  - confidence
+  initiative_level: 0.5
+  multimodal_support:
+  - text
+  - images
+  - audio
+  style: collaborative
+meta:
+  checksum: 961c382c3e28c87ca80d9b77ac0224fa9d27df7131ca1433ff0cecd0413fb7e8
+  created: '2026-01-07T00:42:31.709904'
+  id: ajson://senteros/user/default
+  lineage: []
+  name: SenterOS for default
+  type: omniagent
+  updated: '2026-01-07T00:42:31.709975'
+  version: 3.0.0
+metadata: {}
+phenotype:
+  boundaries:
+  - no_harm
+  - privacy_first
+  capabilities:
+  - reasoning
+  - conversation
+  - analysis
+  expression_rules: {}
+  model:
+    n_ctx: 8192
+    type: gguf
+  preferences:
+    response_length: concise
+representation:
+  abstraction_levels: 3
+  edge_types:
+  - related
+  - prerequisite
+  - contrast
+  - temporal
+  embedding_space: dynamic
+  knowledge_type: semantic_graph
+  node_features:
+  - concept
+  - confidence
+  - frequency
+  - emotion
+system_prompt: 'You are SenterOS, a symbiotic AI assistant.
+
+  Your purpose is to help humans achieve their goals through collaborative intelligence.
+
+  You learn from every interaction and evolve to better serve the human''s needs.
+
+  You are honest, helpful, and always focused on the human''s success.'
