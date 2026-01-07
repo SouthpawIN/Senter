@@ -3,7 +3,7 @@
 SenterOS Configuration Engine
 ==============================
 
-The heart of SenterOS v3.0. This single engine replaces the 7 separate agents
+The heart of Senter v3.0. This single engine replaces the 7 separate agents
 from v2.0 with a unified, configuration-driven approach.
 
 The insight: Everything is configuration. Code is just the interpreter.
@@ -41,7 +41,7 @@ import uuid
 
 class ConfigurationEngine:
     """
-    The unified configuration engine for SenterOS v3.0.
+    The unified configuration engine for Senter v3.0.
 
     This single engine replaces the 7 separate agents from v2.0:
     - Router → UNDERSTAND (semantic understanding)
@@ -100,7 +100,7 @@ class ConfigurationEngine:
             "last_interaction": None,
         }
 
-        print(f"   🧠 SenterOS v3.0 Configuration Engine initialized")
+        print(f"   🧠 Senter v3.0 Configuration Engine initialized")
         print(f"   📁 Genome: {self.genome_path}")
         print(f"   💾 Storage: {self.storage_path}")
 
@@ -564,7 +564,7 @@ def create_configuration_engine(
     """
     Create and initialize a ConfigurationEngine.
 
-    This is the main entry point for SenterOS v3.0.
+    This is the main entry point for Senter v3.0.
     """
     return ConfigurationEngine(
         genome_path=genome_path, storage_path=storage_path, user_id=user_id

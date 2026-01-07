@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-SenterOS v3.0 - Configuration-Driven AI Assistant
-==================================================
+Senter v3.0 - Configuration-Driven AI Assistant
+=================================================
 
 The perfect AI assistant, built on the insight that configuration is DNA.
 
@@ -16,7 +16,7 @@ This module provides:
 Usage:
 ======
 
-from senteros import create_configuration_engine
+from Senter import create_configuration_engine
 
 engine = create_configuration_engine()
 result = engine.interact("Hello!")
@@ -25,7 +25,7 @@ print(result["response"])
 """
 
 __version__ = "3.0.0"
-__author__ = "SenterOS Team"
+__author__ = "Senter Team"
 
 from .genome.genome import (
     Genome,

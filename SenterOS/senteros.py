@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-SenterOS v3.0 - Main Entry Point
-=================================
+Senter v3.0 - Configuration-Driven AI Assistant
+=================================================
 
 The perfect AI assistant, built on the insight that configuration is DNA.
 
 Usage:
 ======
 
-    python senteros.py                 # CLI mode
-    python senteros.py --tui          # TUI mode
-    python senteros.py --test         # Run tests
-    python senteros.py --interact     # Interactive REPL
+    python Senter/              # CLI mode
+    python Senter/ --tui        # TUI mode
+    python Senter/ --test       # Run tests
+    python Senter/ --interact   # Interactive REPL
 """
 
 import sys
@@ -84,7 +84,7 @@ def run_cli():
 
 async def run_tui():
     """Run the TUI interface."""
-    from SenterOS.interface.tui import SenterOSTUI
+    from interface.tui import SenterOSTUI
     from SenterOS.engine.configuration_engine import create_configuration_engine
 
     engine = create_configuration_engine(
@@ -106,7 +106,7 @@ def run_interactive():
     )
 
     print("\n" + "=" * 60)
-    print("   SenterOS v3.0 - Interactive REPL")
+    print("   Senter v3.0 - Interactive REPL")
     print("=" * 60)
     print("\nType 'quit' to exit, 'status' for system status.\n")
 
@@ -145,7 +145,7 @@ def run_interactive():
 
 def run_tests():
     """Run component tests."""
-    print("\n🧪 Running SenterOS v3.0 Component Tests\n")
+    print("\n🧪 Running Senter v3.0 Component Tests\n")
 
     tests_passed = 0
     tests_failed = 0
@@ -153,7 +153,7 @@ def run_tests():
     # Test 1: Genome
     print("Testing Genome...")
     try:
-        from SenterOS.genome import Genome, create_default_genome
+        from genome.genome import Genome, create_default_genome
 
         genome = create_default_genome()
         assert genome.meta.version == "3.0.0"
@@ -167,7 +167,7 @@ def run_tests():
     # Test 2: Knowledge Graph
     print("Testing Knowledge Graph...")
     try:
-        from SenterOS.knowledge import KnowledgeGraph, create_default_knowledge_graph
+        from knowledge.knowledge_graph import KnowledgeGraph, create_default_knowledge_graph
 
         kg = create_default_knowledge_graph()
         assert kg is not None
@@ -180,7 +180,7 @@ def run_tests():
     # Test 3: Living Memory
     print("Testing Living Memory...")
     try:
-        from SenterOS.memory import LivingMemory, create_default_memory
+        from memory.living_memory import LivingMemory, create_default_memory
 
         memory = create_default_memory()
         assert memory is not None
@@ -193,7 +193,7 @@ def run_tests():
     # Test 4: Evolution Engine
     print("Testing Evolution Engine...")
     try:
-        from SenterOS.evolution import EvolutionEngine, create_default_evolution_engine
+        from evolution.evolution_engine import EvolutionEngine, create_default_evolution_engine
 
         evolution = create_default_evolution_engine()
         assert evolution is not None
@@ -206,7 +206,7 @@ def run_tests():
     # Test 5: Capability Registry
     print("Testing Capability Registry...")
     try:
-        from SenterOS.capabilities import (
+        from capabilities.capability_registry import (
             CapabilityRegistry,
             create_default_capability_registry,
         )
@@ -222,7 +222,7 @@ def run_tests():
     # Test 6: Configuration Engine
     print("Testing Configuration Engine...")
     try:
-        from SenterOS.engine import create_configuration_engine
+        from engine.configuration_engine import create_configuration_engine
 
         engine = create_configuration_engine()
         assert engine is not None
@@ -235,7 +235,7 @@ def run_tests():
     # Test 7: Interaction
     print("Testing Interaction...")
     try:
-        from SenterOS.engine import create_configuration_engine
+        from engine.configuration_engine import create_configuration_engine
 
         engine = create_configuration_engine()
         result = engine.interact("Hello, SenterOS!")
@@ -274,14 +274,14 @@ def main():
             run_interactive()
         elif command == "--help":
             print("""
-SenterOS v3.0 - Configuration-Driven AI Assistant
+Senter v3.0 - Configuration-Driven AI Assistant
 
 Usage:
-    python senteros.py                 # CLI mode (default)
-    python senteros.py --tui          # TUI mode (requires textual)
-    python senteros.py --interact     # Interactive REPL
-    python senteros.py --test         # Run component tests
-    python senteros.py --help         # Show this help
+    python Senter/                 # CLI mode (default)
+    python Senter/ --tui          # TUI mode (requires textual)
+    python Senter/ --interact     # Interactive REPL
+    python Senter/ --test         # Run component tests
+    python Senter/ --help         # Show this help
 
 The perfect AI assistant, built on the insight that configuration is DNA.
             """)
@@ -290,7 +290,7 @@ The perfect AI assistant, built on the insight that configuration is DNA.
             print("Use --help for usage information.")
             sys.exit(1)
     else:
-        print("🚀 Starting SenterOS v3.0...\n")
+        print("🚀 Starting Senter v3.0...\n")
         run_cli()
 
 

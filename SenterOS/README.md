@@ -1,4 +1,4 @@
-# SenterOS v3.0 - Configuration-Driven AI Assistant
+# Senter v3.0 - Configuration-Driven AI Assistant
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -21,14 +21,14 @@
 
 **"Configuration is the DNA of an AI system. Code is just the cell membrane."**
 
-SenterOS v3.0 represents a paradigm shift in AI system design. Instead of hard-coding behaviors, everything is defined declaratively in configuration files called **genomes**. The system:
+Senter v3.0 represents a paradigm shift in AI system design. Instead of hard-coding behaviors, everything is defined declaratively in configuration files called **genomes**. The system:
 
 - **Evolves** its own configuration based on outcomes
 - **Discovers** capabilities automatically
 - **Learns** from every interaction
 - **Adapts** to the individual human it serves
 
-## Comparison: Senter v2.0 vs SenterOS v3.0
+## Comparison: Senter v2.0 vs Senter v3.0
 
 | Aspect | v2.0 (Current) | v3.0 (Perfect) |
 |--------|---------------|----------------|
@@ -101,23 +101,23 @@ The unified engine that replaces 7 separate agents:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/senteros.git
-cd senteros/SenterOS
+git clone https://github.com/yourusername/Senter.git
+cd Senter/Senter
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Run tests
-python senteros.py --test
+python Senter.py --test
 
 # Start CLI mode
-python senteros.py
+python Senter.py
 
 # Start TUI mode (requires textual)
-python senteros.py --tui
+python Senter.py --tui
 
 # Start interactive REPL
-python senteros.py --interact
+python Senter.py --interact
 ```
 
 ## Usage
@@ -125,7 +125,7 @@ python senteros.py --interact
 ### Basic CLI Usage
 
 ```python
-from SenterOS import create_configuration_engine
+from Senter import create_configuration_engine
 
 # Create the engine
 engine = create_configuration_engine(
@@ -143,7 +143,7 @@ print(result["response"])
 ### Custom Genome
 
 ```python
-from SenterOS import Genome, create_default_genome
+from Senter import Genome, create_default_genome
 
 # Create a custom genome
 genome = create_default_genome()
@@ -179,9 +179,9 @@ profile = engine.get_user_profile()
 ## Project Structure
 
 ```
-SenterOS/
+Senter/
 ├── __init__.py                 # Package exports
-├── senteros.py                 # Main entry point
+├── Senter.py                 # Main entry point
 ├── genome/
 │   ├── __init__.py
 │   └── genome.py              # Genome (DNA) specification
@@ -267,7 +267,7 @@ User Input
 
 ## Contributing
 
-SenterOS is built on the insight that configuration is DNA. Contributions should follow this principle:
+Senter is built on the insight that configuration is DNA. Contributions should follow this principle:
 
 1. **Before adding code, ask**: "Can this be configuration instead?"
 2. **All behavior should be declarative**, not imperative
@@ -275,7 +275,7 @@ SenterOS is built on the insight that configuration is DNA. Contributions should
 
 ## The Vision
 
-SenterOS v3.0 is not just an AI assistant—it's a proof of concept for the future of AI systems:
+Senter v3.0 is not just an AI assistant—it's a proof of concept for the future of AI systems:
 
 > **"The best AI systems are defined by their relationships, not their code."**
 
@@ -294,9 +294,9 @@ Built on the **Insight>Architecture Framework** from the Senter project, which t
 
 > **"The best research contributions aren't 'we built X' - they're 'we understood Y.'"**
 
-The insight behind SenterOS is: **Configuration is the DNA of an AI system.**
+The insight behind Senter is: **Configuration is the DNA of an AI system.**
 
 ---
 
-**SenterOS v3.0** - Configuration-Driven AI Assistant
+**Senter v3.0** - Configuration-Driven AI Assistant
 *"Configuration is the DNA of an AI system"*
