@@ -1,5 +1,3 @@
-# Senter
-
 ![Senter](assets/banner.webp)
 
 A lightweight, skill-aware AI agent that uses RAG-based capability discovery.
