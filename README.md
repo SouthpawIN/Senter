@@ -5,6 +5,8 @@ A lightweight, skill-aware AI agent that uses RAG-based capability discovery.
   
 * In Norwegian, senter translates to center (UK) or center (US), referring to a place designed for a specific activity, such as a shopping center (kjøpesenter), fitness center (treningssenter), or hospital center (helsesenter). 
 
+![Senter in action](assets/screenshot.jpg)
+
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
