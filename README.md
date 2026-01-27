@@ -1,4 +1,4 @@
-  A lightweight, skill-aware AI agent that uses RAG-based capability discovery.
+    A lightweight, skill-aware AI agent that uses RAG-based capability discovery.
 ![Senter](assets/banner.webp)
 
 * In Indonesian and Malay, senter means flashlight or torch (US: flashlight, UK: torch).  It is derived from Dutch zaklantaarn or Javanese sènter, and is synonymous with lampu senter or lampu picit.
