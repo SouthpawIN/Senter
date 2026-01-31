@@ -1,85 +1,50 @@
-A lightweight, skill-aware AI agent that uses RAG-based capability discovery.
-![Senter](assets/banner.webp)
+# Senter
 
-* In Indonesian and Malay, senter means flashlight or torch (US: flashlight, UK: torch).  It is derived from Dutch zaklantaarn or Javanese sènter, and is synonymous with lampu senter or lampu picit.
-  
-* In Norwegian, senter translates to center (UK) or center (US), referring to a place designed for a specific activity, such as a shopping center (kjøpesenter), fitness center (treningssenter), or hospital center (helsesenter). 
+> **The Markdown OS for AI Agents**
 
-![Senter in action](assets/screenshot.jpg)
+Senter is a minimalist, self-aware AI agent orchestrated entirely through Markdown. Unlike traditional agents with hardcoded logic, Senter's personality, tools, and lifecycle are defined within an Obsidian-compatible vault.
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+## 🚀 Key Features
 
-## Features
+- **Markdown-as-Code:** Configure agents, skills, and hooks simply by editing `.md` files.
+- **Senter Select Engine:** High-performance two-stage retrieval (Embedding Top 4 ➔ LLM Decision Top 1) for both skills and memory.
+- **Terminal-First:** A dedicated persistent terminal (via Zellij) for executing complex background tasks.
+- **Obsidian Integration:** Use your personal vault as the "Live OS" for your agent.
+- **Progressive Disclosure:** Skills and memories are loaded only when needed, keeping the context laser-focused.
 
-- **Skill Discovery**: Automatically finds and indexes skills from multiple directories
-- **RAG Selection**: Uses embedding similarity to select the top 4 most relevant skills per query
-- **Multi-Model**: Supports routing to different models based on skill requirements
-- **Terminal Markdown**: Renders markdown with ANSI colors
-- **Task Tracking**: Built-in `/plan`, `/next`, `/done` commands
+## 🏗️ Architecture
 
-## Quick Start
+- **`server.py`:** A unified multi-model server (FastAPI) that manages local GGUF models via `llama-server`. Optimized for GLM 4.7 Flash.
+- **`senter.py` (The Kernel):** A lightweight "bootloader" that indexes your Markdown vault and handles the LLM selection loop.
+- **The Vault:**
+  - `AGENTS/`: Persona and goal definitions.
+  - `SKILLS/`: Capability definitions with bash tool blocks.
+  - `HOOKS/`: Event-driven lifecycle triggers (e.g., `on_startup`).
+  - `STATE/`: Persistent chat history and long-term memory.
 
+## 🛠️ Quick Start
+
+### 1. Start the Server
 ```bash
-# Clone the repo
-git clone https://github.com/SouthpawIN/Senter.git
-cd Senter
+python3 server.py
+```
 
-# Run (requires Senter-Server or compatible OpenAI API)
+### 2. Configure the Vault
+Senter looks for its brain at `~/.senter/vault`. You can symlink this to your Obsidian vault:
+```bash
+ln -s ~/.senter/vault "~/Documents/Obsidian Vault/Senter"
+```
+
+### 3. Launch Senter
+```bash
 python3 senter.py
 ```
 
-## Configuration
+## 🧠 Senter Select
+Senter handles "unlimited skills" by performing a dual-layer search:
+1. **Embedding Stage:** Uses `nomic-embed-text` to find the 4 most relevant tools/memories.
+2. **LLM Stage:** Performs a hidden inference where the model picks the #1 best context.
+3. **Final Response:** Only the selected context is injected, ensuring maximum accuracy and minimum token waste.
 
-All configuration is done via environment variables:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SENTER_URL` | `http://localhost:8081/v1` | API server URL |
-| `SENTER_MODEL` | `glm-4.7-flash` | Primary model name |
-| `SENTER_EMBED_MODEL` | `nomic-embed-text` | Embedding model |
-| `SENTER_HISTORY` | `20` | Conversation history limit |
-| `SENTER_AUX_URLS` | `` | Comma-separated auxiliary API URLs |
-
-## Skills
-
-Skills are discovered from:
-- `~/.opencode/skills/`
-- `~/.claude/skills/`
-- `./.agent/skills/`
-- `./skills/`
-
-Each skill must have a `SKILL.md` file with YAML frontmatter:
-
-```yaml
----
-name: my-skill
-description: What this skill does
-model: optional-model-override
-keywords: comma, separated, keywords
----
-
-# Skill Instructions
-
-Commands the agent can use...
-```
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `/q` or `exit` | Quit |
-| `/c` | Clear conversation history |
-| `/plan <goal>` | Create a task plan |
-| `/next` | Focus on next incomplete task |
-| `/done <task>` | Mark task complete |
-| `/unload <model>` | Unload a model from memory |
-
-## Related Projects
-
-- [Senter-Server](https://github.com/SouthpawIN/Senter-Server) - Dual-core model proxy
-- [burner-phone](https://github.com/SouthpawIN/burner-phone) - Android control skill
-
-## License
-
+## 🛡️ License
 MIT
